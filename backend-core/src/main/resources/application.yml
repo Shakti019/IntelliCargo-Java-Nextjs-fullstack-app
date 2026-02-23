@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: intellicargo-core
+  datasource:
+    # Use Supabase Transaction Pooler (Support IPv4 & Connection Pooling)
+    url: jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0
+    username: postgres.hpprnmdszveyxcpcporf
+    password: 5Nsf9bAossqWixdv
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
+      pool-name: IntelliCargoHikariPool
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    defer-datasource-initialization: true
+  # sql:
+  #   init:
+  #     mode: always  # Automatically loads seed data on startup (WARNING: deletes existing data)
+  #     data-locations: classpath:data-seed.sql
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: YOUR_GOOGLE_CLIENT_ID
+            client-secret: YOUR_GOOGLE_CLIENT_SECRET
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-name: Google
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
+  jwt:
+    secret: "WW91clNlY3JldEtleVNob3VsZEJlTG9uZ0FuZFNlY3VyZUVub3VnaEZvckhTMjU2QWxnb3JpdGht"
+    expiration: 86400000 

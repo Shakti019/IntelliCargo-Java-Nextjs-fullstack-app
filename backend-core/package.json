@@ -1,0 +1,21 @@
+{
+  "name": "intellicargo-api-tests",
+  "version": "2.0.0",
+  "description": "Automated API testing for IntelliCargo Backend - Complete System Testing",
+  "main": "run-complete-tests.js",
+  "scripts": {
+    "test": "node run-api-tests.js",
+    "test:complete": "node run-complete-tests.js",
+    "test:full": "node run-complete-tests.js",
+    "test:watch": "nodemon run-api-tests.js"
+  },
+  "keywords": ["api", "testing", "intellicargo", "automation", "e2e"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}

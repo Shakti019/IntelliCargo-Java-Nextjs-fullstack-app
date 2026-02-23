@@ -1,0 +1,403 @@
+### IntelliCargo API Testing Suite
+### Use VS Code REST Client extension or similar tools
+### Base URL
+@baseUrl = http://localhost:8080
+@token = YOUR_JWT_TOKEN_HERE
+
+### ===========================================
+### 1. AUTHENTICATION ENDPOINTS
+### ===========================================
+
+### Register new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test.user@example.com",
+  "password": "SecurePass123!",
+  "fullName": "Test User",
+  "country": "USA"
+}
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test.user@example.com",
+  "password": "SecurePass123!"
+}
+
+### ===========================================
+### 2. COMPANY ENDPOINTS
+### ===========================================
+
+### Get my company details
+GET {{baseUrl}}/api/companies/my-company
+Authorization: Bearer {{token}}
+
+### Create a new company
+POST {{baseUrl}}/api/companies
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Global Trade Corp",
+  "registrationNumber": "REG-2024-12345",
+  "country": "USA",
+  "status": "PENDING"
+}
+
+### Update my company
+PUT {{baseUrl}}/api/companies/my-company
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Global Trade Corp Updated",
+  "registrationNumber": "REG-2024-12345",
+  "country": "USA",
+  "status": "ACTIVE"
+}
+
+### Get all companies (Admin only)
+GET {{baseUrl}}/api/companies/all
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 3. PRODUCT ENDPOINTS
+### ===========================================
+
+### Create a new product
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Premium Coffee Beans",
+  "category": "Agriculture",
+  "hsCode": "0901.21",
+  "description": "High-quality Arabica coffee beans from Colombia",
+  "unitType": "KG",
+  "originCountry": "Colombia",
+  "isActive": true
+}
+
+### Get product by ID
+GET {{baseUrl}}/api/products/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get my company products
+GET {{baseUrl}}/api/products/my-company
+Authorization: Bearer {{token}}
+
+### Get all active products
+GET {{baseUrl}}/api/products/active
+Authorization: Bearer {{token}}
+
+### Get products by category
+GET {{baseUrl}}/api/products/category/Agriculture
+Authorization: Bearer {{token}}
+
+### Search products with filters
+GET {{baseUrl}}/api/products/search?category=Agriculture&originCountry=Colombia&isActive=true
+Authorization: Bearer {{token}}
+
+### Update product
+PUT {{baseUrl}}/api/products/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Premium Coffee Beans - Updated",
+  "category": "Agriculture",
+  "hsCode": "0901.21",
+  "description": "Updated description",
+  "unitType": "KG",
+  "originCountry": "Colombia",
+  "isActive": true
+}
+
+### Delete (deactivate) product
+DELETE {{baseUrl}}/api/products/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 4. PRODUCT LISTING ENDPOINTS
+### ===========================================
+
+### Create a new product listing
+POST {{baseUrl}}/api/product-listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "availableQuantity": 5000,
+  "minOrderQuantity": 100,
+  "maxOrderQuantity": 2000,
+  "pricePerUnit": 8.50,
+  "currency": "USD",
+  "incoterm": "FOB",
+  "portOfLoading": "Port of Cartagena",
+  "validUntil": "2026-12-31",
+  "listingStatus": "OPEN"
+}
+
+### Get listing by ID
+GET {{baseUrl}}/api/product-listings/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get my company listings
+GET {{baseUrl}}/api/product-listings/my-company
+Authorization: Bearer {{token}}
+
+### Get marketplace listings (all valid open listings)
+GET {{baseUrl}}/api/product-listings/marketplace
+Authorization: Bearer {{token}}
+
+### Get listings by product ID
+GET {{baseUrl}}/api/product-listings/product/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Search listings with filters
+GET {{baseUrl}}/api/product-listings/search?currency=USD&incoterm=FOB&status=OPEN
+Authorization: Bearer {{token}}
+
+### Update listing
+PUT {{baseUrl}}/api/product-listings/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "availableQuantity": 4500,
+  "minOrderQuantity": 100,
+  "maxOrderQuantity": 2000,
+  "pricePerUnit": 8.75,
+  "currency": "USD",
+  "incoterm": "FOB",
+  "portOfLoading": "Port of Cartagena",
+  "validUntil": "2026-12-31",
+  "listingStatus": "OPEN"
+}
+
+### Close listing
+PATCH {{baseUrl}}/api/product-listings/3fa85f64-5717-4562-b3fc-2c963f66afa6/close
+Authorization: Bearer {{token}}
+
+### Delete listing
+DELETE {{baseUrl}}/api/product-listings/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 5. TRADE REQUEST ENDPOINTS
+### ===========================================
+
+### Create a new trade request (Buy Product)
+POST {{baseUrl}}/api/trade-requests
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tradeType": "BUY_PRODUCT",
+  "title": "Looking to buy 1000 KG Premium Coffee",
+  "description": "We need high-quality Arabica coffee beans for our chain",
+  "quantity": 1000,
+  "unitType": "KG",
+  "budgetMin": 7.00,
+  "budgetMax": 9.00,
+  "currency": "USD",
+  "originCountry": "Colombia",
+  "destinationCountry": "USA",
+  "preferredIncoterm": "CIF",
+  "tradeStatus": "OPEN",
+  "visibility": "GLOBAL",
+  "expiresAt": "2026-03-31T23:59:59"
+}
+
+### Create trade request (Transport Service)
+POST {{baseUrl}}/api/trade-requests
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tradeType": "TRANSPORT_SERVICE",
+  "title": "Need sea freight from Shanghai to Los Angeles",
+  "description": "40ft container transport required",
+  "quantity": 1,
+  "unitType": "CONTAINER",
+  "budgetMin": 2000,
+  "budgetMax": 3000,
+  "currency": "USD",
+  "originCountry": "China",
+  "destinationCountry": "USA",
+  "preferredIncoterm": "FOB",
+  "tradeStatus": "OPEN",
+  "visibility": "GLOBAL",
+  "expiresAt": "2026-04-15T23:59:59"
+}
+
+### Get trade request by ID
+GET {{baseUrl}}/api/trade-requests/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get my company trade requests
+GET {{baseUrl}}/api/trade-requests/my-company
+Authorization: Bearer {{token}}
+
+### Get marketplace trade requests
+GET {{baseUrl}}/api/trade-requests/marketplace
+Authorization: Bearer {{token}}
+
+### Get trade requests by type
+GET {{baseUrl}}/api/trade-requests/type/BUY_PRODUCT
+Authorization: Bearer {{token}}
+
+### Search trade requests
+GET {{baseUrl}}/api/trade-requests/search?tradeType=BUY_PRODUCT&tradeStatus=OPEN&visibility=GLOBAL
+Authorization: Bearer {{token}}
+
+### Update trade request
+PUT {{baseUrl}}/api/trade-requests/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated: Looking to buy 1200 KG Premium Coffee",
+  "description": "Updated requirements",
+  "quantity": 1200,
+  "unitType": "KG",
+  "budgetMin": 7.00,
+  "budgetMax": 9.50,
+  "currency": "USD",
+  "originCountry": "Colombia",
+  "destinationCountry": "USA",
+  "preferredIncoterm": "CIF",
+  "expiresAt": "2026-04-30T23:59:59"
+}
+
+### Cancel trade request
+PATCH {{baseUrl}}/api/trade-requests/3fa85f64-5717-4562-b3fc-2c963f66afa6/cancel
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 6. TRADE OFFER ENDPOINTS
+### ===========================================
+
+### Create a trade offer
+POST {{baseUrl}}/api/trade-offers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tradeRequestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "offeredPrice": 8.25,
+  "offeredQuantity": 1000,
+  "currency": "USD",
+  "estimatedDeliveryDays": 30,
+  "additionalTerms": "Payment: 50% advance, 50% on delivery. Quality certified."
+}
+
+### Get offer by ID
+GET {{baseUrl}}/api/trade-offers/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get offers for a trade request
+GET {{baseUrl}}/api/trade-offers/trade-request/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get my company offers
+GET {{baseUrl}}/api/trade-offers/my-company
+Authorization: Bearer {{token}}
+
+### Accept an offer
+PATCH {{baseUrl}}/api/trade-offers/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=ACCEPTED
+Authorization: Bearer {{token}}
+
+### Reject an offer
+PATCH {{baseUrl}}/api/trade-offers/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=REJECTED
+Authorization: Bearer {{token}}
+
+### Delete offer
+DELETE {{baseUrl}}/api/trade-offers/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 7. TRADE ORDER ENDPOINTS
+### ===========================================
+
+### Create order from accepted offer
+POST {{baseUrl}}/api/trade-orders/from-offer/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get order by ID
+GET {{baseUrl}}/api/trade-orders/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get my company orders
+GET {{baseUrl}}/api/trade-orders/my-company
+Authorization: Bearer {{token}}
+
+### Get purchase orders (as buyer)
+GET {{baseUrl}}/api/trade-orders/purchases
+Authorization: Bearer {{token}}
+
+### Get sales orders (as seller)
+GET {{baseUrl}}/api/trade-orders/sales
+Authorization: Bearer {{token}}
+
+### Update order status to IN_PROGRESS
+PATCH {{baseUrl}}/api/trade-orders/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=IN_PROGRESS
+Authorization: Bearer {{token}}
+
+### Update order status to COMPLETED
+PATCH {{baseUrl}}/api/trade-orders/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=COMPLETED
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 8. SHIPMENT ENDPOINTS
+### ===========================================
+
+### Create shipment for an order
+POST {{baseUrl}}/api/shipments/order/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get shipment by ID
+GET {{baseUrl}}/api/shipments/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get shipment by order ID
+GET {{baseUrl}}/api/shipments/order/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get shipments by status
+GET {{baseUrl}}/api/shipments/status/IN_TRANSIT
+Authorization: Bearer {{token}}
+
+### Update shipment status to PROCESSING
+PATCH {{baseUrl}}/api/shipments/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=PROCESSING
+Authorization: Bearer {{token}}
+
+### Update shipment status to IN_TRANSIT
+PATCH {{baseUrl}}/api/shipments/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=IN_TRANSIT
+Authorization: Bearer {{token}}
+
+### Update shipment status to DELIVERED
+PATCH {{baseUrl}}/api/shipments/3fa85f64-5717-4562-b3fc-2c963f66afa6/status?status=DELIVERED
+Authorization: Bearer {{token}}
+
+### ===========================================
+### 9. USER ENDPOINTS
+### ===========================================
+
+### Get current user profile
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer {{token}}
+
+### Get current user roles
+GET {{baseUrl}}/api/users/me/roles
+Authorization: Bearer {{token}}
+
+### Get all users (Admin only)
+GET {{baseUrl}}/api/users/admin/all
+Authorization: Bearer {{token}}
