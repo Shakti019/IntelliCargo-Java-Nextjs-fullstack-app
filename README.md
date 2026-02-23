@@ -1,6 +1,6 @@
 # IntelliCargo Forecast – Full System Plan
 
-IntelliCargo Forecast is an AI-powered import–export logistics platform that enables users to manage trade operations, book transport slots, and optimize global supply routes using predictive analytics and reinforcement learning.
+IntelliCargo Forecast is an  import–export logistics platform that enables users to manage trade operations, book transport slots, and optimize global supply routes using predictive analytics and reinforcement learning.
 
 ## 📌 Project Architecture
 
